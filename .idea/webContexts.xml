@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/property/edit_device.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/property" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/property/edit_nomenclature.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/property" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/property/new_device.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/property" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/index.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+      </map>
+    </option>
+  </component>
+</project>

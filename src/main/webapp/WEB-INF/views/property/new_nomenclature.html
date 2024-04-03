@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание номенклатуры</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+<div th:insert="property/navbar.html :: navbar"></div>
+
+<div class="container">
+    <h3>Создание номенклатуры</h3>
+    <form th:method="POST" th:action="@{/nomenclature}" th:object="${nomenclature}">
+        <label class="form-label" for="type">Тип: </label>
+        <select class="form-control" th:field="*{type}" id="type" required>
+            <option th:value="Терминал" th:text="Терминал">
+            <option th:value="Пин-пад" th:text="Пин-пад">
+            <option th:value="Клавиатура" th:text="Клавиатура">
+            </option>
+        </select>
+        <br/>
+        <label class="form-label" for="producer">Производитель: </label>
+        <input class="form-control" type="text" th:field="*{producer}" id="producer" required>
+        <div th:if="${#fields.hasErrors()}" th:errors="*{producer}"></div>
+        <br/>
+        <label class="form-label" for="name">Модель: </label>
+        <input class="form-control" type="text" th:field="*{name}" id="name" required>
+        <div th:if="${#fields.hasErrors()}" th:errors="*{name}"></div>
+        <br/>
+        <input class="btn btn-primary mb-3" type="submit" value="Создать">
+    </form>
+    <br/>
+</div>
+</body>
+</html>

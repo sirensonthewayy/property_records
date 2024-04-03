@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jpackage" name="property_records">
+    <output-path>$PROJECT_DIR$/out/artifacts/property_records</output-path>
+    <root id="root">
+      <element id="archive" name="property_records.jar">
+        <element id="module-output" name="property_records" />
+      </element>
+    </root>
+  </artifact>
+</component>
