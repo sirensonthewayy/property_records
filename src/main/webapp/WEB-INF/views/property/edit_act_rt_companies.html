@@ -24,8 +24,14 @@
         <br/>
         <label class="form-label" for="device">Оборудование: </label>
         <select class="form-control" th:field="*{companyAct.device.inventoryCard}" id="device" required>
-            <option th:each="device : ${workingDevices}" th:value="${device.getInventoryCard()}"
-                    th:text="${device.getInventoryCard()} + ', ' + ${device.getNomenclature().getName()}">
+            <option th:each="device : ${devicesInStock}" th:value="${device.getInventoryCard()}"
+                    th:text="${device.getInventoryCard()} + ', ' + ${device.getNomenclature().getProducer()} +
+                    ' ' + ${device.getNomenclature().getName()}">
+            </option>
+            <option th:value="${companyAct.getDevice().getInventoryCard()}"
+                    th:text="${companyAct.getDevice().getInventoryCard()} + ', ' +
+                    ${companyAct.getDevice().getNomenclature().getProducer()} + ' ' +
+                    ${companyAct.getDevice().getNomenclature().getName()}">
             </option>
         </select>
         <br/>

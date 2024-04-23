@@ -54,22 +54,22 @@ public class ActRTCompaniesController {
         return "property/acts_rt_companies.html";
     }
 
-    @GetMapping("/new_transmission")
-    public String newTransmissionAct(){
-        return "property/new_act_rt_companies_transmission.html";
+    @GetMapping("/report")
+    public String showAllInCompanies(Model model){
+        model.addAttribute("currentActs", actRTCompaniesDAO.showCurrentActs());
+        return "property/report_all_devices_in_companies.html";
     }
 
-/*    @GetMapping("/{id}/new_reception")
-    public String newReceptionAct(Model model, @PathVariable("id") Integer id){
-        model.addAttribute("companyAct", actRTCompaniesDAO.showOne(id));
-        return "property/new_act_rt_companies_reception.html";
-    }*/
+    @GetMapping("/new_transmission")
+    public String newTransmissionAct(){
+        return "property/new_act_rt_companies.html";
+    }
 
     @PostMapping()
     public String createAct(@ModelAttribute("companyAct") @Valid ActRTCompanies actRTCompanies,
                             BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return "property/new_act_rt_companies_transmission.html";
+            return "property/new_act_rt_companies.html";
         }
         actRTCompaniesDAO.save(actRTCompanies);
         return "redirect:/companies_act/show_all";
@@ -78,7 +78,7 @@ public class ActRTCompaniesController {
     @GetMapping("/{id}/edit")
     public String editAct(@PathVariable("id") Integer id, Model model){
         model.addAttribute("companyAct", actRTCompaniesDAO.showOne(id));
-        model.addAttribute("companies", companyDAO.showAll());
+        /*model.addAttribute("companies", companyDAO.showAll());*/
         return "property/edit_act_rt_companies.html";
     }
 

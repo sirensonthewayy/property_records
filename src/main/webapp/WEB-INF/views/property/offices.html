@@ -10,15 +10,76 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
-
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/shim.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <div th:insert="property/navbar.html :: navbar"></div>
 <div class="container">
     <h3>Офисы</h3>
-    <div th:each="office : ${offices}">
+    <table class="table" id="offices">
+        <thead>
+            <tr>
+                <th scope="col">№</th>
+                <th scope="col">Адрес</th>
+                <th scope="col">Директор</th>
+                <th scope="col">Номер телефона</th>
+            </tr>
+        </thead>
+        <tbody>
+            <div th:each="office : ${offices}">
+                <tr>
+                    <td>
+                        <a th:href="@{/office/{id}/edit(id = ${office.getId()})}">
+                            <div th:text="${office.getId()}"></div>
+                        </a>
+                    </td>
+                    <td th:text="${office.getAddress()}"></td>
+                    <td th:text="${office.getChief()}"></td>
+                    <td th:text="${office.getPhoneNumber()}"></td>
+                </tr>
+            </div>
+        </tbody>
+    </table>
+<!--    <div th:each="office : ${offices}">
         <a th:href="@{/office/{id}/edit(id = ${office.getId()})}"
         th:text="${office.getAddress()}">office</a>
-    </div>
+    </div>-->
 </div>
+
+<script type="text/javascript">
+    new DataTable('#offices', {
+        order: [],
+        language: {
+            "decimal":        "",
+            "emptyTable":     "В таблице отсутствуют данные",
+            "info":           "Записи с _START_ до _END_ из _TOTAL_ записей",
+            "infoEmpty":      "Записи с 0 до 0 из 0 записей",
+            "infoFiltered":   "(отфильтровано из _MAX_ записей)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "Число записей: _MENU_",
+            "loadingRecords": "Загрузка...",
+            "processing":     "",
+            "search":         "Поиск:",
+            "zeroRecords":    "Подходящие записи не найдены",
+            "paginate": {
+                "first":      "Первый",
+                "last":       "Последний",
+                "next":       "Следующий",
+                "previous":   "Предыдущий"
+            },
+            "aria": {
+                "orderable":  "Сортировать по колонке",
+                "orderableReverse": "Сортировать по колонке в обратном порядке"
+            }
+        },
+        pagingType: 'full_numbers',
+        lengthMenu: [10, { label: 'Все', value: -1 }]
+    });
+</script>
+
 </body>
 <br/>
 </html>

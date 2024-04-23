@@ -29,7 +29,8 @@
         <select class="form-control" th:field="*{writeOffAct.device.inventoryCard}" id="device" required>
             <option th:each="device: ${devicesOnStock}"
             th:value="${device.getInventoryCard()}"
-            th:text="${device.getInventoryCard()}"></option>
+            th:text="${device.getInventoryCard()} + ', ' + ${device.getNomenclature().getProducer()} +
+            ' ' + ${device.getNomenclature().getName()}"></option>
         </select>
         <br/>
         <input class="btn btn-primary mb-3" type="submit" value="Создать">

@@ -10,19 +10,86 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/shim.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 
 <div th:insert="property/navbar.html :: navbar"></div>
 
 <div class="container">
     <h3>Все акты приема-передачи с контрагентами</h3>
-    <div th:each="act : ${companiesActs}">
+    <table class="table" id="rtCompaniesActs">
+        <thead>
+            <tr>
+                <th scope="col">№</th>
+                <th scope="col">Контрагент</th>
+                <th scope="col">Инвентарник оборудования</th>
+                <th scope="col">Модель оборудования</th>
+                <th scope="col">Дата передачи</th>
+                <th scope="col">Дата возврата</th>
+            </tr>
+        </thead>
+        <tbody>
+            <div th:each="act : ${companiesActs}">
+                <tr>
+                    <td>
+                        <a th:href="@{/companies_act/{id}/edit(id = ${act.getId()})}">
+                            <div th:text="${act.getId()}"></div>
+                        </a>
+                    </td>
+                    <td th:text="${act.getCompany().getName()}"></td>
+                    <td th:text="${act.getDevice().getInventoryCard()}"></td>
+                    <td th:text="${act.getDevice().getNomenclature().getProducer()} + ', '
+                    + ${act.getDevice().getNomenclature().getName()}"></td>
+                    <td th:text="${act.getDateOfTransmission()}"></td>
+                    <td th:text="${act.getDateOfReception()}"></td>
+                </tr>
+            </div>
+        </tbody>
+    </table>
+<!--    <div th:each="act : ${companiesActs}">
         <a th:href="@{/companies_act/{id}/edit(id = ${act.getId()})}"
            th:text="${act.getCompany().getName()} + ', ' + ${act.getDevice().getInventoryCard()} + ', '
            + ${act.getDevice().getNomenclature().getProducer()} + ', ' +
            ${act.getDevice().getNomenclature().getName()} + ', ' + ${act.getDateOfTransmission()}">
         </a>
-    </div>
+    </div>-->
 </div>
 <br/>
+
+<script type="text/javascript">
+    new DataTable('#rtCompaniesActs', {
+        order: [],
+        language: {
+            "decimal":        "",
+            "emptyTable":     "В таблице отсутствуют данные",
+            "info":           "Записи с _START_ до _END_ из _TOTAL_ записей",
+            "infoEmpty":      "Записи с 0 до 0 из 0 записей",
+            "infoFiltered":   "(отфильтровано из _MAX_ записей)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "Число записей: _MENU_",
+            "loadingRecords": "Загрузка...",
+            "processing":     "",
+            "search":         "Поиск:",
+            "zeroRecords":    "Подходящие записи не найдены",
+            "paginate": {
+                "first":      "Первый",
+                "last":       "Последний",
+                "next":       "Следующий",
+                "previous":   "Предыдущий"
+            },
+            "aria": {
+                "orderable":  "Сортировать по колонке",
+                "orderableReverse": "Сортировать по колонке в обратном порядке"
+            }
+        },
+        pagingType: 'full_numbers',
+        lengthMenu: [10, 25, 50, { label: 'Все', value: -1 }]
+    });
+</script>
+
 </body>
 </html>

@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 
-public class ActRTCompanies {
+public class ActRTCompanies{
 
     private Integer id;
     private Company company;

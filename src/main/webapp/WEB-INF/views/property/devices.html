@@ -3,34 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <title>Оборудование</title>
+<!--
     <link th:href="@{/static/css/styles.css}" rel="stylesheet" type="text/css"/>
+-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="//cdn.datatables.net/2.0.5/css/dataTables.dataTables.min.css">
 </head>
+
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/shim.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 
 <div th:insert="property/navbar.html :: navbar"></div>
+
 <div class="container">
     <h3>Оборудование</h3>
-    <div th:each="device: ${devices}">
+    <table class="table" id="devices" style="width:100%">
+        <thead>
+        <tr>
+            <th scope="col">Инвентарная карточка</th>
+            <th scope="col">Серийный номер</th>
+            <th scope="col">Производитель</th>
+            <th scope="col">Модель</th>
+            <th scope="col">Дата приемки</th>
+            <th scope="col">Цена</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Примечание</th>
+        </tr>
+        </thead>
+        <tbody>
+            <div th:each="device: ${devices}">
+                <tr>
+                    <td>
+                        <a th:href="@{/device/{ic}/edit(ic = ${device.getInventoryCard()})}">
+                            <div th:text="${device.getInventoryCard()}"></div>
+                        </a>
+                    </td>
+                    <td th:text="${device.getSerialNumber()}"></td>
+                    <td th:text="${device.getNomenclature().getProducer()}"></td>
+                    <td th:text="${device.getNomenclature().getName()}"></td>
+                    <td th:text="${device.getDateOfSupply()}"></td>
+                    <td th:text="${device.getPrice()}"></td>
+                    <td th:text="${device.getStatus()}"></td>
+                    <td th:text="${device.getNote()}"></td>
+                </tr>
+            </div>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-primary"
+            onclick="exportToExcel()">Экспорт таблицы в Excel</button>
+</div>
+<script>
+    new DataTable('#devices', {
+        order: [],
+        language: {
+            "decimal":        "",
+            "emptyTable":     "В таблице отсутствуют данные",
+            "info":           "Записи с _START_ до _END_ из _TOTAL_ записей",
+            "infoEmpty":      "Записи с 0 до 0 из 0 записей",
+            "infoFiltered":   "(отфильтровано из _MAX_ записей)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "Число записей: _MENU_",
+            "loadingRecords": "Загрузка...",
+            "processing":     "",
+            "search":         "Поиск:",
+            "zeroRecords":    "Подходящие записи не найдены",
+            "paginate": {
+                "first":      "Первый",
+                "last":       "Последний",
+                "next":       "Следующий",
+                "previous":   "Предыдущий"
+            },
+            "aria": {
+                "orderable":  "Сортировать по колонке",
+                "orderableReverse": "Сортировать по колонке в обратном порядке"
+            }
+        },
+/*        layout: {
+            topStart: null,
+            topEnd: null,
+            topStart: 'search',
+            topEnd: 'pageLength',
+            bottomStart: 'info',
+            bottomEnd: 'paging'
+        },*/
+        pagingType: 'full_numbers',
+        lengthMenu: [10, 25, 50, { label: 'Все', value: -1 }]
+    });
+</script>
+<script type="text/javascript">
+    function exportToExcel(){
+        var workbook = XLSX.utils.book_new();
+        var worksheet = XLSX.utils.table_to_sheet(document.getElementById("devices"), raw=true);
+
+        var columnB = XLSX.utils.decode_col("B");
+        var columnF = XLSX.utils.decode_col("F");
+        var fmt = '0.00₽';
+        var range = XLSX.utils.decode_range(worksheet['!ref']);
+        for(var i = range.s.r + 1; i <= range.e.r; ++i) {
+            var refB = XLSX.utils.encode_cell({r:i, c:columnB});
+            var refF = XLSX.utils.encode_cell({r:i, c:columnF});
+            if(!worksheet[refB]) continue;
+            worksheet[refB].t = 's';
+            worksheet[refF].z = fmt;
+        }
+        worksheet['!cols'] = [{ width: 20 }, { width: 18 }, { width: 14 }, { width: 8 },
+            { width: 13 }, { width: 10 }, { width: 20 }, { width: 20 } ];
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Оборудование");
+        XLSX.writeFile(workbook, "Оборудование.xlsx");
+    }
+</script>
+
+
+</body>
+</html>
+
+<!--    <div th:each="device: ${devices}">
         <a th:href="@{/device/{ic}/edit(ic = ${device.getInventoryCard()})}"
            th:text="${device.getNomenclature().getProducer() + ', ' + device.getNomenclature().getName() + ', ' +
            device.getInventoryCard() + ', ' + device.getDateOfSupply() + ', ' +
            device.getPrice() + ', ' + device.getStatus()}">Device</a>
-    </div>
-    <br/>
-    <!--<div th:each="result: ${resultsByStatuses}">
-        <span th:if="${result.value.get(0) != 0}">
-            <h4 th:text="${result.key}"></h4>
-            <h5 th:text="'Total amount: ' +  ${result.value.get(0)}"></h5>
-            <h5 th:text="'Total price: ' +  ${result.value.get(1)} + 'P'"></h5>
-        </span>
-    </div>
-    <br/>-->
-    <table>
+    </div>-->
+<!--<div th:each="result: ${resultsByStatuses}">
+    <span th:if="${result.value.get(0) != 0}">
+        <h4 th:text="${result.key}"></h4>
+        <h5 th:text="'Total amount: ' +  ${result.value.get(0)}"></h5>
+        <h5 th:text="'Total price: ' +  ${result.value.get(1)} + 'P'"></h5>
+    </span>
+</div>
+<br/>-->
+<!--    <table>
         <tr>
             <td>Статус</td>
             <td>Число</td>
@@ -41,8 +151,4 @@
             <td th:text="${result.value.get(0)}"></td>
             <td th:text="${result.value.get(1)}"></td>
         </tr>
-    </table>
-    <br/>
-</div>
-</body>
-</html>
+    </table>-->

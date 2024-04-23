@@ -10,15 +10,85 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/shim.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 
 <div th:insert="property/navbar.html :: navbar"></div>
 <div class="container">
     <h3>Номенклатура</h3>
-    <div th:each="no : ${nomenclatures}">
+    <table class="table" id="nomenclatures">
+        <thead>
+            <tr>
+                <th scope="col">№</th>
+                <th scope="col">Вид оборудования</th>
+                <th scope="col">Производитель</th>
+                <th scope="col">Модель</th>
+            </tr>
+        </thead>
+        <tbody>
+            <div th:each="nomenclature : ${nomenclatures}">
+                <tr>
+                    <td>
+                        <a th:href="@{/nomenclature/{id}/edit(id = ${nomenclature.getId()})}">
+                            <div th:text="${nomenclature.getId()}"></div>
+                        </a>
+                    </td>
+                    <td th:text="${nomenclature.getType()}"></td>
+                    <td th:text="${nomenclature.getProducer()}"></td>
+                    <td th:text="${nomenclature.getName()}"></td>
+                </tr>
+            </div>
+        </tbody>
+    </table>
+<!--    <div th:each="no : ${nomenclatures}">
         <a th:href="@{/nomenclature/{id}/edit(id = ${no.getId()})}"
            th:text="${no.getType() + ', ' + no.getProducer() + ', ' + no.getName()}">nomenclature</a>
-    </div>
+    </div>-->
 </div>
+
+<script type="text/javascript">
+    new DataTable('#nomenclatures', {
+        order: [],
+        language: {
+            "decimal":        "",
+            "emptyTable":     "В таблице отсутствуют данные",
+            "info":           "Записи с _START_ до _END_ из _TOTAL_ записей",
+            "infoEmpty":      "Записи с 0 до 0 из 0 записей",
+            "infoFiltered":   "(отфильтровано из _MAX_ записей)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "Число записей: _MENU_",
+            "loadingRecords": "Загрузка...",
+            "processing":     "",
+            "search":         "Поиск:",
+            "zeroRecords":    "Подходящие записи не найдены",
+            "paginate": {
+                "first":      "Первый",
+                "last":       "Последний",
+                "next":       "Следующий",
+                "previous":   "Предыдущий"
+            },
+            "aria": {
+                "orderable":  "Сортировать по колонке",
+                "orderableReverse": "Сортировать по колонке в обратном порядке"
+            }
+        },
+        /*        layout: {
+                    topStart: null,
+                    topEnd: null,
+                    topStart: 'search',
+                    topEnd: 'pageLength',
+                    bottomStart: 'info',
+                    bottomEnd: 'paging'
+                },*/
+        pagingType: 'full_numbers',
+        lengthMenu: [10, 25, 50, { label: 'Все', value: -1 }]
+    });
+</script>
+
 </body>
 <br/>
 </html>

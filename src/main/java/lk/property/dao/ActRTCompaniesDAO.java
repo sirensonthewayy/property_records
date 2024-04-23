@@ -59,4 +59,13 @@ public class ActRTCompaniesDAO {
         jdbcTemplate.update("DELETE FROM Акт_ПП_контрагенты WHERE код_документа = ?", id);
     }
 
+    public List<ActRTCompanies> showCurrentActs(){
+        return jdbcTemplate.query("SELECT * FROM Акт_ПП_контрагенты\n" +
+                "LEFT JOIN Оборудование ON Акт_ПП_контрагенты.инвентарная_карточка = Оборудование.инвентарная_карточка\n" +
+                "LEFT JOIN Номенклатура ON Оборудование.код_номенклатуры = Номенклатура.код_номенклатуры\n" +
+                "LEFT JOIN Контрагенты ON Акт_ПП_контрагенты.инн = Контрагенты.инн\n" +
+                "WHERE дата_приемки IS NULL",
+                new ActRTCompaniesMapper(new DeviceMapper(new NomenclatureMapper()), new CompanyMapper()));
+    }
+
 }

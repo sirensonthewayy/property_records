@@ -29,6 +29,7 @@ public class DevicesController {
         statuses = new ArrayList<>();
         statuses.add("Работает (на складе)");
         statuses.add("Работает (у клиента)");
+        statuses.add("Передан в филиал");
         statuses.add("Не работает");
         statuses.add("Списан");
         statuses.add("В ремонте");
