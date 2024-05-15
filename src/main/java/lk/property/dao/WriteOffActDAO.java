@@ -24,7 +24,7 @@ public class WriteOffActDAO {
                 new WriteOffActMapper(new DeviceMapper(new NomenclatureMapper())));
     }
 
-    public WriteOffAct showOne(int id){
+    public WriteOffAct showOne(Integer id){
         return jdbcTemplate.query("SELECT * FROM Акт_списания LEFT JOIN Оборудование" +
                 " ON Акт_списания.инвентарная_карточка = Оборудование.инвентарная_карточка " +
                                 "LEFT JOIN Номенклатура ON Оборудование.код_номенклатуры = Номенклатура.код_номенклатуры " +

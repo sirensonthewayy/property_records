@@ -2,6 +2,7 @@ package lk.property.dao;
 
 import lk.property.models.Company;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,7 @@ public class CompanyDAO {
                 new CompanyMapper()).stream().findAny().orElse(null);
     }
 
-    public void save(Company company){
+    public void save(Company company) throws DuplicateKeyException {
         jdbcTemplate.update("INSERT INTO Контрагенты(инн, название_организации, адрес, фио_руководителя, телефон) VALUES(?, ?, ?, ?, ?)",
                 company.getInn(), company.getName(), company.getAddress(), company.getChief(), company.getPhoneNumber());
     }

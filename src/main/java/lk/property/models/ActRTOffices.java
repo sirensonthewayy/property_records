@@ -3,6 +3,7 @@ package lk.property.models;
 import jakarta.validation.constraints.NotNull;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class ActRTOffices {
 
@@ -62,5 +63,18 @@ public class ActRTOffices {
 
     public void setDateOfReception(Date dateOfReception) {
         this.dateOfReception = dateOfReception;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ActRTOffices that = (ActRTOffices) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

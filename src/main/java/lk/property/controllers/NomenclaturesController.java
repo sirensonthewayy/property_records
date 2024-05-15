@@ -46,9 +46,14 @@ public class NomenclaturesController {
 
     @GetMapping("/{id}/edit")
     public String editNomenclature(@PathVariable("id") int id, Model model){
-        model.addAttribute("nomenclature", nomenclatureDAO.showOne(id));
-        model.addAttribute("haveDevices", nomenclatureDAO.haveDevices(id));
-        return "property/edit_nomenclature.html";
+        Nomenclature nomenclature = nomenclatureDAO.showOne(id);
+        if(nomenclature == null){
+            return "property/404.html";
+        } else{
+            model.addAttribute("nomenclature", nomenclature);
+            model.addAttribute("haveDevices", nomenclatureDAO.haveDevices(id));
+            return "property/edit_nomenclature.html";
+        }
     }
 
     @PatchMapping("/{id}")

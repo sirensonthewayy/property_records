@@ -3,27 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Редактирование акта</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+<script th:src="@{/static/js/bootstrap.bundle.min.js}"></script>
 
 <div th:insert="property/navbar.html :: navbar"></div>
 
 <div class="container">
     <h3>Редактирование акта приема-передачи с контрагентом</h3>
-    <form th:method="PATCH" th:action="@{/companies_act/{id}(id = ${companyAct.getId()})}" style="display:inline">
+    <form th:method="PATCH" th:action="@{/companies_act/{id}(id = ${editCompanyAct.getId()})}" style="display:inline">
         <label class="form-label" for="company">Компания: </label>
-        <select class="form-control" th:field="*{companyAct.company.inn}" id="company" required>
+        <input class="form-control" id="company" th:field="*{editCompanyAct.company.inn}" list="companyList" required>
+        <datalist id="companyList">
             <option th:each="company : ${companies}" th:value="${company.getInn()}" th:text="${company.getName()}">
             </option>
-        </select>
+        </datalist>
+        <div th:if="${#fields.hasErrors('editCompanyAct.company')}"
+             th:errors="*{editCompanyAct.company}">Company error</div>
+<!--        <select class="form-control" th:field="*{companyAct.company.inn}" id="company" required>
+            <option th:each="company : ${companies}" th:value="${company.getInn()}" th:text="${company.getName()}">
+            </option>
+        </select>-->
         <br/>
         <label class="form-label" for="device">Оборудование: </label>
-        <select class="form-control" th:field="*{companyAct.device.inventoryCard}" id="device" required>
+        <input class="form-control" id="device" th:field="*{editCompanyAct.device.inventoryCard}" list="deviceList" autocomplete="off" required>
+        <datalist id="deviceList">
+            <option th:each="device : ${devicesInStock}" th:value="${device.getInventoryCard()}"
+                    th:text="${device.getNomenclature().getProducer()} + ' ' + ${device.getNomenclature().getName()}">
+            </option>
+            <option th:if="${!devicesInStock.contains(editCompanyAct.getDevice())}" th:value="${editCompanyAct.getDevice().getInventoryCard()}"
+                    th:text="${editCompanyAct.getDevice().getNomenclature().getProducer()}
+                    + ' ' + ${editCompanyAct.getDevice().getNomenclature().getName()}">
+            </option>
+        </datalist>
+        <div th:if="${#fields.hasErrors('editCompanyAct.device')}"
+             th:errors="*{editCompanyAct.device}">Device error</div>
+<!--        <select class="form-control" th:field="*{companyAct.device.inventoryCard}" id="device" required>
             <option th:each="device : ${devicesInStock}" th:value="${device.getInventoryCard()}"
                     th:text="${device.getInventoryCard()} + ', ' + ${device.getNomenclature().getProducer()} +
                     ' ' + ${device.getNomenclature().getName()}">
@@ -33,21 +49,28 @@
                     ${companyAct.getDevice().getNomenclature().getProducer()} + ' ' +
                     ${companyAct.getDevice().getNomenclature().getName()}">
             </option>
-        </select>
+        </select>-->
         <br/>
         <label class="form-label" for="dateOfTransmission">Дата передачи: </label>
-        <input class="form-control" type="date" th:field="*{companyAct.dateOfTransmission}" id="dateOfTransmission" required>
-        <div th:if="${#fields.hasErrors('companyAct.dateOfTransmission')}"
-             th:errors="*{companyAct.dateOfTransmission}">Date of transmission error</div>
+        <input class="form-control" type="date" th:field="*{editCompanyAct.dateOfTransmission}" id="dateOfTransmission" required>
+        <div th:if="${#fields.hasErrors('editCompanyAct.dateOfTransmission')}"
+             th:errors="*{editCompanyAct.dateOfTransmission}">Date of transmission error</div>
         <br/>
         <label class="form-label" for="dateOfReception">Дата приемки (возврата): </label>
-        <input class="form-control" type="date" th:field="*{companyAct.dateOfReception}" id="dateOfReception">
-        <div th:if="${#fields.hasErrors('companyAct.dateOfReception')}"
-             th:errors="*{companyAct.dateOfReception}">Date of reception error</div>
+        <input class="form-control" type="date" th:field="*{editCompanyAct.dateOfReception}" id="dateOfReception">
+        <div th:if="${#fields.hasErrors('editCompanyAct.dateOfReception')}"
+             th:errors="*{editCompanyAct.dateOfReception}">Date of reception error</div>
         <br/>
-        <input class="btn btn-primary mb-3" type="submit" value="Обновить">
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              th:attr="data-bs-title=${editCompanyAct.getDateOfReception() != null && !thisActIsLast
+              ? 'Данный документ не является последним' : ''}">
+            <input th:disabled="${editCompanyAct.getDateOfReception() != null && !thisActIsLast}"
+                   class="btn btn-primary mb-3" type="submit" value="Обновить"/>
+        </span>
+<!--        <input class="btn btn-primary mb-3" type="submit" value="Обновить"/>-->
     </form>
-    <form th:method="DELETE" th:action="@{/companies_act/{id}(id = ${companyAct.getId()})}" style="display:inline">
+    <form th:method="DELETE" th:action="@{/companies_act/{id}(id = ${editCompanyAct.getId()})}" style="display:inline">
         <input class="btn btn-primary mb-3" type="submit" value="Удалить"/>
     </form>
     <form th:method="GET" th:action="@{/companies_act/show_all}" style="display:inline">
@@ -65,5 +88,10 @@
     </div>
     <br/>-->
 </div>
+
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
 </body>
 </html>

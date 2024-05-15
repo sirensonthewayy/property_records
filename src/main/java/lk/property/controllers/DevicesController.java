@@ -1,15 +1,16 @@
 package lk.property.controllers;
 
 import jakarta.validation.Valid;
+import lk.property.dao.ActDAO;
 import lk.property.dao.DeviceDAO;
 import lk.property.dao.NomenclatureDAO;
 import lk.property.models.Device;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,19 +21,14 @@ public class DevicesController {
 
     private final DeviceDAO deviceDAO;
     private final NomenclatureDAO nomenclatureDAO;
+    private final ActDAO actDAO;
     public ArrayList<String> statuses;
 
     @Autowired
-    public DevicesController(DeviceDAO deviceDAO, NomenclatureDAO nomenclatureDAO){
+    public DevicesController(DeviceDAO deviceDAO, NomenclatureDAO nomenclatureDAO, ActDAO actDAO){
         this.deviceDAO = deviceDAO;
         this.nomenclatureDAO = nomenclatureDAO;
-        statuses = new ArrayList<>();
-        statuses.add("Работает (на складе)");
-        statuses.add("Работает (у клиента)");
-        statuses.add("Передан в филиал");
-        statuses.add("Не работает");
-        statuses.add("Списан");
-        statuses.add("В ремонте");
+        this.actDAO = actDAO;
     }
 
     @GetMapping("/show_all")
@@ -43,10 +39,18 @@ public class DevicesController {
     }
 
     @ModelAttribute
-    public void initModel(Model model){
+    public void initModel(@PathVariable(required = false, value = "inventoryCard") String inventoryCard, Model model){
+        statuses = new ArrayList<>();
+        statuses.add("Работает (на складе)");
+        statuses.add("Работает (у клиента)");
+        statuses.add("Передан в филиал");
+        statuses.add("Не работает");
+        statuses.add("Списан");
+        statuses.add("В ремонте");
         model.addAttribute("device", new Device());
         model.addAttribute("statuses", statuses);
         model.addAttribute("avalNomenclatures", nomenclatureDAO.showAll());
+        model.addAttribute("acts", actDAO.showActsByDevice(inventoryCard));
     }
 
     @GetMapping("/new")
@@ -58,27 +62,41 @@ public class DevicesController {
     public String createDevice(@ModelAttribute("device") @Valid Device device,
                                BindingResult bindingResult){
         //device.setNomenclature(nomenclatureDAO.showOne(nomenclature.getId()));
+        try{
+            deviceDAO.save(device);
+        } catch(DuplicateKeyException e){
+            bindingResult.rejectValue("inventoryCard", "error.inventoryCard", "Данная инвентарная карточка уже используется");
+        }
         if(bindingResult.hasErrors()){
             return "property/new_device.html";
         }
-        deviceDAO.save(device);
         return "redirect:/device/show_all";
     }
 
     @GetMapping("/{inventoryCard}/edit")
     public String editDevice(@PathVariable("inventoryCard") String inventoryCard, Model model){
-        model.addAttribute("device", deviceDAO.showOne(inventoryCard));
-        return "property/edit_device.html";
+        Device device = deviceDAO.showOne(inventoryCard);
+        if(device == null){
+            return "property/404.html";
+        } else {
+            model.addAttribute("device", device);
+            model.addAttribute("acts", actDAO.showActsByDevice(inventoryCard));
+            return "property/edit_device.html";
+        }
     }
 
     @PatchMapping("/{inventoryCard}")
     public String updateDevice(@ModelAttribute("device") @Valid Device device,
                                BindingResult bindingResult,
                                @PathVariable("inventoryCard") String inventoryCard){
+        try{
+            deviceDAO.update(inventoryCard, device);
+        } catch(DuplicateKeyException e){
+            bindingResult.rejectValue("inventoryCard", "error.inventoryCard", "Данная инвентарная карточка уже используется");
+        }
         if(bindingResult.hasErrors()){
             return "property/edit_device.html";
         }
-        deviceDAO.update(inventoryCard, device);
         return "redirect:/device/show_all";
     }
 

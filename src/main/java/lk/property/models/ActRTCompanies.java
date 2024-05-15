@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class ActRTCompanies{
 
@@ -64,5 +65,18 @@ public class ActRTCompanies{
 
     public void setDateOfReception(Date dateOfReception) {
         this.dateOfReception = dateOfReception;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ActRTCompanies that = (ActRTCompanies) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }

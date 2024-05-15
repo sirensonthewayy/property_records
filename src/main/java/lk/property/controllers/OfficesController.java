@@ -40,8 +40,13 @@ public class OfficesController {
 
     @GetMapping("/{id}/edit")
     public String editOffice(@PathVariable("id") int id, Model model){
-        model.addAttribute("office", officeDAO.showOne(id));
-        return "property/edit_office.html";
+        Office office = officeDAO.showOne(id);
+        if(office == null){
+            return "property/404.html";
+        } else{
+            model.addAttribute("office", office);
+            return "property/edit_office.html";
+        }
     }
 
     @PatchMapping("/{id}")

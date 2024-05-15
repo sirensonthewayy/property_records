@@ -3,6 +3,7 @@ package lk.property.dao;
 import lk.property.models.Device;
 import lk.property.models.Nomenclature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -44,7 +45,6 @@ public class DeviceDAO {
         return jdbcTemplate.query("SELECT * FROM Оборудование LEFT JOIN Номенклатура ON Оборудование.код_номенклатуры = Номенклатура.код_номенклатуры WHERE статус = 'Работает (на складе)' OR статус = 'Работает (у клиента)'",
                 new DeviceMapper(new NomenclatureMapper()));
     }*/
-
 
     public HashMap<String, List<Double>> getAmountAndPriceByStatuses(){
         ArrayList<String> statuses = new ArrayList<>();
@@ -93,7 +93,7 @@ public class DeviceDAO {
         }
     }*/
 
-    public void save(Device device){
+    public void save(Device device) throws DuplicateKeyException {
         jdbcTemplate.update("INSERT INTO Оборудование VALUES (?, ?, ?, ?, ?, ?, ?)",
                 device.getInventoryCard(),
                 device.getNomenclature().getId(),
