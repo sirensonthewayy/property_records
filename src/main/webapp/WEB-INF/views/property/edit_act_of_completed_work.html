@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование акта выполненных работ</title>
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<script th:src="@{/static/js/bootstrap.bundle.min.js}" rel="text/javascript"></script>
+
+<div th:insert="property/navbar.html :: navbar"></div>
+
+<div class="container">
+    <h3>Редактирование акта выполненных работ</h3>
+    <form th:method="PATCH" th:action="@{/completed_work_act/{id}(id = ${editActOfCompletedWork.getId()})}" style="display:inline">
+        <label class="form-label" for="actRTRepair">Акт приема-передачи с ремонтниками: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются все акты приема-передачи с ремонтниками, не имеющих даты возврата.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
+        <select class="form-control" th:field="*{editActOfCompletedWork.actRTRepair.id}" id="actRTRepair" required>
+            <option th:each="actRTRepair : ${allActsRTRepair}" th:value="${actRTRepair.getId()}"
+                    th:text="'Акт с ' + ${actRTRepair.getRepairCompany().getName()} + ' от ' +
+                    ${actRTRepair.getDateOfTransmission()} + ' на передачу ' + ${actRTRepair.getDevice().getInventoryCard()} + ', ' +
+                    ${actRTRepair.getDevice().getNomenclature().getProducer()} + ' ' +
+                    ${actRTRepair.getDevice().getNomenclature().getName()}">
+            </option>
+            <option selected th:value="${editActOfCompletedWork.getActRTRepair().getId()}"
+                    th:text="'Акт с ' + ${editActOfCompletedWork.getActRTRepair().getRepairCompany().getName()} + ' от ' +
+                    ${editActOfCompletedWork.getActRTRepair().getDateOfTransmission()} + ' на передачу ' + ${editActOfCompletedWork.getActRTRepair().getDevice().getInventoryCard()} + ', ' +
+                    ${editActOfCompletedWork.getActRTRepair().getDevice().getNomenclature().getProducer()} + ' ' +
+                    ${editActOfCompletedWork.getActRTRepair().getDevice().getNomenclature().getName()}"></option>
+        </select>
+        <br/>
+        <label class="form-label" for="price">Цена: </label>
+        <input class="form-control" type="number" th:field="*{editActOfCompletedWork.price}" id="price" required>
+        <br/>
+        <label class="form-label" for="works">Выполненные работы: </label>
+        <input class="form-control" type="text" th:field="*{editActOfCompletedWork.works}" id="works" required>
+        <br/>
+        <label class="form-label" for="dateOfReception">Дата приемки (возврата): </label>
+        <input class="form-control" type="date" th:field="*{editActOfCompletedWork.dateOfReception}" id="dateOfReception" required>
+        <div th:if="${#fields.hasErrors('editActOfCompletedWork.dateOfReception')}"
+             th:errors="*{editActOfCompletedWork.dateOfReception}">Date of reception error</div>
+        <br/>
+        <input class="form-check-input" type="checkbox" th:field="*{editActOfCompletedWork.malfunction}" id="malfunction"
+               onclick="changeFieldAccess()">
+        <label class="form-check-label" for="malfunction">Оборудование неисправно</label>
+        <br/>
+        <br/>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              th:attr="data-bs-title=${editActOfCompletedWork.getDateOfReception() != null && !thisActIsLast
+              ? 'Данный документ не является последним' : ''}">
+            <input th:disabled="${editActOfCompletedWork.getDateOfReception() != null && !thisActIsLast}"
+                   class="btn btn-primary mb-3" type="submit" value="Обновить"/>
+        </span>
+    </form>
+    <form th:method="DELETE" th:action="@{/completed_work_act/{id}(id = ${editActOfCompletedWork.getId()})}" style="display:inline">
+                <span class="d-inline-block" tabindex="0"
+                      data-bs-toggle="tooltip"
+                      th:attr="data-bs-title=${editActOfCompletedWork.getDateOfReception() != null && !thisActIsLast
+              ? 'Данный документ не является последним' : ''}">
+            <input th:disabled="${editActOfCompletedWork.getDateOfReception() != null && !thisActIsLast}"
+                   class="btn btn-primary mb-3" type="submit" value="Удалить"/>
+        </span>
+<!--        <input class="btn btn-primary mb-3" type="submit" value="Удалить"/>-->
+    </form>
+    <form th:method="GET" th:action="@{/completed_work_act/show_all}" style="display:inline">
+        <input class="btn btn-primary mb-3" type="submit" value="Вернуться назад"/>
+    </form>
+</div>
+<script>
+    function changeFieldAccess(){
+        if(document.querySelector('#malfunction:checked')){
+            document.getElementById('price').disabled = true;
+            document.getElementById('works').disabled = true;
+            document.getElementById('price').value = '';
+            document.getElementById('works').value = '';
+        } else{
+            document.getElementById('price').disabled = false;
+            document.getElementById('works').disabled = false;
+        }
+    }
+    changeFieldAccess()
+</script>
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
+</body>
+</html>

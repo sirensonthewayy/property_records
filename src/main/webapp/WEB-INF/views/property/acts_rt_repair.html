@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Все акты с ремонтниками</title>
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<script th:src="@{/static/js/bootstrap.bundle.min.js}" rel="text/javascript"></script>
+<script th:src="@{/static/js/jquery-3.7.1.js}" rel="text/javascript"></script>
+<script th:src="@{/static/js/datatables.js}" rel="text/javascript"></script>
+<script th:src="@{/static/js/dataTables.bootstrap5.js}" rel="text/javascript"></script>
+<!--<script th:src="@{/static/js/shim.min.js}" rel="text/javascript"></script>
+<script th:src="@{/static/js/xlsx.full.min.js}" rel="text/javascript"></script>-->
+
+<div th:insert="property/navbar.html :: navbar"></div>
+
+<div class="container">
+    <h3>Все акты приема-передачи с ремонтниками</h3>
+    <table class="table" id="actsRTRepair">
+        <thead>
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Инвентарник оборудования</th>
+            <th scope="col">Модель оборудования</th>
+            <th scope="col">Ремонтный центр</th>
+            <th scope="col">Дата передачи</th>
+            <th scope="col">Дата возврата</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="actRTRepair : ${actsRTRepair}">
+                <td>
+                    <a th:href="@{/act_rt_repair/{id}/edit(id = ${actRTRepair.getId()})}">
+                        <div th:text="${actRTRepair.getId()}"></div>
+                    </a>
+                </td>
+                <td th:text="${actRTRepair.getDevice().getInventoryCard()}"></td>
+                <td th:text="${actRTRepair.getDevice().getNomenclature().getProducer()} + ' '
+                + ${actRTRepair.getDevice().getNomenclature().getName()}"></td>
+                <td th:text="${actRTRepair.getRepairCompany().getName()}"></td>
+                <td th:text="${actRTRepair.getDateOfTransmission()}"></td>
+                <td th:text="${actRTRepair.getDateOfReception()}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <!--    <div th:each="act : ${companiesActs}">
+            <a th:href="@{/companies_act/{id}/edit(id = ${act.getId()})}"
+               th:text="${act.getCompany().getName()} + ', ' + ${act.getDevice().getInventoryCard()} + ', '
+               + ${act.getDevice().getNomenclature().getProducer()} + ', ' +
+               ${act.getDevice().getNomenclature().getName()} + ', ' + ${act.getDateOfTransmission()}">
+            </a>
+        </div>-->
+</div>
+<br/>
+
+<script type="text/javascript">
+    new DataTable('#actsRTRepair', {
+        order: [],
+        language: {
+            "decimal":        "",
+            "emptyTable":     "В таблице отсутствуют данные",
+            "info":           "Записи с _START_ до _END_ из _TOTAL_ записей",
+            "infoEmpty":      "Записи с 0 до 0 из 0 записей",
+            "infoFiltered":   "(отфильтровано из _MAX_ записей)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "Число записей: _MENU_",
+            "loadingRecords": "Загрузка...",
+            "processing":     "",
+            "search":         "Поиск:",
+            "zeroRecords":    "Подходящие записи не найдены",
+            "paginate": {
+                "first":      "Первый",
+                "last":       "Последний",
+                "next":       "Следующий",
+                "previous":   "Предыдущий"
+            },
+            "aria": {
+                "orderable":  "Сортировать по колонке",
+                "orderableReverse": "Сортировать по колонке в обратном порядке"
+            }
+        },
+        pagingType: 'full_numbers',
+        lengthMenu: [10, 25, 50, { label: 'Все', value: -1 }]
+    });
+</script>
+
+</body>
+</html>

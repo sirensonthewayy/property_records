@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ремонтные центры</title>
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+
+<body>
+
+<script th:src="@{/static/js/bootstrap.bundle.min.js}" rel="text/javascript"></script>
+<script th:src="@{/static/js/jquery-3.7.1.js}" rel="text/javascript"></script>
+<script th:src="@{/static/js/datatables.js}" rel="text/javascript"></script>
+<script th:src="@{/static/js/dataTables.bootstrap5.js}" rel="text/javascript"></script>
+
+<div th:insert="property/navbar.html :: navbar"></div>
+
+<div class="container">
+    <h3>Ремонтные центры</h3>
+    <table class="table" id="repairCompanies">
+        <thead>
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Название</th>
+            <th scope="col">Адрес</th>
+            <th scope="col">Номер телефона</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="repairCompany : ${repairCompanies}">
+                <td>
+                    <a th:href="@{/repair_companies/{id}/edit(id = ${repairCompany.getId()})}">
+                        <div th:text="${repairCompany.getId()}"></div>
+                    </a>
+                </td>
+                <td th:text="${repairCompany.getName()}"></td>
+                <td th:text="${repairCompany.getAddress()}"></td>
+                <td th:text="${repairCompany.getPhoneNumber()}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <!--    <div th:each="office : ${offices}">
+            <a th:href="@{/office/{id}/edit(id = ${office.getId()})}"
+            th:text="${office.getAddress()}">office</a>
+        </div>-->
+</div>
+
+<script type="text/javascript">
+    new DataTable('#repairCompanies', {
+        order: [],
+        language: {
+            "decimal":        "",
+            "emptyTable":     "В таблице отсутствуют данные",
+            "info":           "Записи с _START_ до _END_ из _TOTAL_ записей",
+            "infoEmpty":      "Записи с 0 до 0 из 0 записей",
+            "infoFiltered":   "(отфильтровано из _MAX_ записей)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "Число записей: _MENU_",
+            "loadingRecords": "Загрузка...",
+            "processing":     "",
+            "search":         "Поиск:",
+            "zeroRecords":    "Подходящие записи не найдены",
+            "paginate": {
+                "first":      "Первый",
+                "last":       "Последний",
+                "next":       "Следующий",
+                "previous":   "Предыдущий"
+            },
+            "aria": {
+                "orderable":  "Сортировать по колонке",
+                "orderableReverse": "Сортировать по колонке в обратном порядке"
+            }
+        },
+        pagingType: 'full_numbers',
+        lengthMenu: [10, { label: 'Все', value: -1 }]
+    });
+</script>
+
+</body>
+</html>

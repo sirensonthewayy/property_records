@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование акта</title>
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<script th:src="@{/static/js/bootstrap.bundle.min.js}"></script>
+
+<div th:insert="property/navbar.html :: navbar"></div>
+
+<div class="container">
+    <h3>Редактирование акта приема-передачи (ремонт)</h3>
+    <form th:method="PATCH" th:action="@{/act_rt_repair/{id}(id = ${editActRTRepair.getId()})}" style="display:inline">
+        <label class="form-label" for="device">Оборудование: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются всё оборудование со статусом 'Не работает'.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
+        <input class="form-control" id="device" th:field="*{editActRTRepair.device.inventoryCard}" list="deviceList" autocomplete="off" required>
+        <datalist id="deviceList">
+            <option th:each="device : ${devices}" th:value="${device.getInventoryCard()}"
+                    th:text="${device.getNomenclature().getProducer()} + ' ' + ${device.getNomenclature().getName()}">
+            </option>
+            <option th:if="${!devices.contains(editActRTRepair.getDevice())}" th:value="${editActRTRepair.getDevice().getInventoryCard()}"
+                    th:text="${editActRTRepair.getDevice().getNomenclature().getProducer()}
+                    + ' ' + ${editActRTRepair.getDevice().getNomenclature().getName()}">
+            </option>
+        </datalist>
+        <div th:if="${#fields.hasErrors('editActRTRepair.device')}" th:errors="*{editActRTRepair.device}">Device error</div>
+<!--        <select class="form-control" th:field="*{actRTRepair.device.inventoryCard}" id="device" required>
+            <option th:each="device : ${devices}" th:value="${device.getInventoryCard()}"
+                    th:text="${device.getInventoryCard()} + ', ' + ${device.getNomenclature().getProducer()} +
+                    ' ' + ${device.getNomenclature().getName()}">
+            </option>
+            <option th:value="${actRTRepair.getDevice().getInventoryCard()}"
+                    th:text="${actRTRepair.getDevice().getInventoryCard()} + ', ' +
+                    ${actRTRepair.getDevice().getNomenclature().getProducer()} + ' ' +
+                    ${actRTRepair.getDevice().getNomenclature().getName()}">
+            </option>
+        </select>-->
+        <br/>
+        <label class="form-label" for="company">Ремонтная компания: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются все ремонтные компании, созданные в разделе 'Ремонт'.
+              Для создания ремонтной компании перейдите в соответствующий раздел.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
+        <select class="form-control" th:field="*{editActRTRepair.repairCompany.id}" id="company" required>
+            <option th:each="repairCompany : ${repairCompanies}" th:value="${repairCompany.getId()}" th:text="${repairCompany.getName()}">
+            </option>
+        </select>
+        <br/>
+        <label class="form-label" for="dateOfTransmission">Дата передачи: </label>
+        <input class="form-control" type="date" th:field="*{editActRTRepair.dateOfTransmission}" id="dateOfTransmission" required>
+        <div th:if="${#fields.hasErrors('editActRTRepair.dateOfTransmission')}"
+            th:errors="*{editActRTRepair.dateOfTransmission}">Date of transmission error</div>
+        <br/>
+        <label class="form-label" for="dateOfReception">Дата приемки (возврата): </label>
+        <input class="form-control" type="date" th:field="*{editActRTRepair.dateOfReception}" id="dateOfReception"
+               data-bs-toggle="tooltip" data-bs-title="Дата приемки заполняется на основе акта выполненных работ автоматически" disabled>
+        <div th:if="${#fields.hasErrors('editActRTRepair.dateOfReception')}"
+             th:errors="*{editActRTRepair.dateOfReception}">Date of reception error</div>
+        <br/>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              th:attr="data-bs-title=${editActRTRepair != null && !thisActIsLast
+              ? 'Данный документ не является последним' : ''}">
+            <input th:disabled="${editActRTRepair != null && !thisActIsLast}"
+                   class="btn btn-primary mb-3" type="submit" value="Обновить"/>
+        </span>
+    </form>
+    <form th:method="DELETE" th:action="@{/act_rt_repair/{id}(id = ${editActRTRepair.getId()})}" style="display:inline">
+        <span class="d-inline-block" tabindex="0"
+                      data-bs-toggle="tooltip"
+                      th:attr="data-bs-title=${editActRTRepair.getDateOfReception() != null ? 'На основе данного акта создан акт выполненных работ' : ''}">
+            <input th:disabled="${editActRTRepair.getDateOfReception() != null}" class="btn btn-primary mb-3" type="submit" value="Удалить"/>
+        </span>
+    </form>
+    <form th:method="GET" th:action="@{/act_rt_repair/show_all}" style="display:inline">
+        <input class="btn btn-primary mb-3" type="submit" value="Вернуться назад"/>
+    </form>
+    <!--    <form th:method="GET" th:action="@{/companies_act/{id}/new_reception(id = ${companyAct.getId()})}" style="display:inline">
+            <span class="d-inline-block" tabindex="0"
+                          data-bs-toggle="tooltip"
+                          th:attr="data-bs-title=${companyAct.getDateOfReception() != ''  ? 'Документ о приемке уже создан' : ''}">
+                <input th:disabled="${companyAct.getDateOfReception() != null}" class="btn btn-primary mb-3" type="submit" value="Создать акт о приемке"/>
+            </span>
+        </form>-->
+    <!--    <div th:if="${companyAct.getMoving() == 'Передача' && companyAct.getDevice().getStatus() == 'Работает (у клиента)'}">
+            <a th:href="@{http://localhost:8080/companies_act/{id}/new_reception(id = ${companyAct.getId()})}">Создать документ приемки на основании этого акта</a>
+        </div>
+        <br/>-->
+</div>
+
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание ремонтного центра</title>
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<script th:src="@{/static/js/bootstrap.bundle.min.js}"></script>
+
+<div th:insert="property/navbar.html :: navbar"></div>
+
+<div class="container">
+    <h3>Создание ремонтного центра</h3>
+    <form th:method="POST" th:action="@{/repair_companies}" th:object="${repairCompany}" style="display:inline">
+        <label for="chief" class="form-label">Название: </label>
+        <input type="text" class="form-control" th:field="*{name}" id="chief" required>
+        <br/>
+        <label for="address" class="form-label">Адрес: </label>
+        <input type="text"  class="form-control" th:field="*{address}" id="address" required>
+        <br/>
+        <label for="phoneNumber" class="form-label">Номер телефона: </label>
+        <input type="text" class="form-control" placeholder="+79998887766" th:field="*{phoneNumber}" id="phoneNumber" required>
+        <br/>
+        <input type="submit" class="btn btn-primary mb-3" value="Создать">
+    </form>
+<!--    <form th:method="GET" th:action="@{/repair_companies/show_all}" style="display:inline">
+        <input class="btn btn-primary mb-3" type="submit" value="Вернуться назад"/>
+    </form>-->
+    <br/>
+</div>
+</body>
+</html>
