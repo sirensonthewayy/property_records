@@ -11,7 +11,7 @@
 <div th:insert="property/navbar.html :: navbar"></div>
 <div class="container">
     <h3>Создание карточки оборудования</h3>
-    <form th:method="POST" th:action="@{/device}">
+    <form th:method="POST" th:action="@{/device}" style="display:inline">
         <label class="form-label" for="inventoryCard">Номер инвентарной карточки: </label>
         <input class="form-control" type="text" pattern="[^\/\\]+" th:field="*{device.inventoryCard}" id="inventoryCard" required>
         <div th:if="${#fields.hasErrors('device.inventoryCard')}"
@@ -23,6 +23,12 @@
              th:errors="*{device.serialNumber}">Serial number error</div>
         <br/>
         <label class="form-label" for="nomenclature">Номенклатура: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются модели оборудования, созданные в разделе 'Номенклатура'.
+                      Для создания номенклатуры перейдите в соответствующий раздел.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
         <select class="form-control" th:field="*{device.nomenclature.id}" id="nomenclature" required>
             <option th:each="avalNomenclature: ${avalNomenclatures}" th:value="${avalNomenclature.getId()}"
                     th:text="${avalNomenclature.getType()} + ' ' + ${avalNomenclature.getProducer()} + ' ' + ${avalNomenclature.getName()}"></option>
@@ -34,7 +40,7 @@
              th:errors="*{device.dateOfSupply}">Date error</div>
         <br/>
         <label class="form-label" for="price">Цена: </label>
-        <input class="form-control" type="number" th:field="*{device.price}" id="price" required>
+        <input class="form-control" type="number" min="0" th:field="*{device.price}" id="price" required>
         <div th:if="${#fields.hasErrors('device.price')}"
              th:errors="*{device.price}">Price error</div>
         <br/>
@@ -48,7 +54,16 @@
         <br/>
         <input class="btn btn-primary mb-3" type="submit" value="Создать">
     </form>
+<!--    <form th:method="GET" th:action="@{/device/show_all}" style="display:inline">
+        <input class="btn btn-primary mb-3" type="submit" value="Вернуться назад"/>
+    </form>-->
     <br/>
 </div>
+
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
+
 </body>
 </html>

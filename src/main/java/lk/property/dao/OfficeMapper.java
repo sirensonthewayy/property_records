@@ -13,7 +13,7 @@ public class OfficeMapper implements RowMapper<Office> {
         Office office = new Office();
         office.setId(resultSet.getInt("код_офиса"));
         office.setAddress(resultSet.getString("адрес"));
-        office.setChief(resultSet.getString("фио_начальника"));
+        office.setResponsiblePerson(resultSet.getString("ответственное_лицо"));
         office.setPhoneNumber(resultSet.getString("телефон"));
         return office;
     }

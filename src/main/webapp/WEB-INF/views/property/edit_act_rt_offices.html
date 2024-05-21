@@ -13,13 +13,24 @@
 <div class="container">
     <h3>Редактирование акта приема-передачи с филиалом</h3>
     <form th:method="PATCH" th:action="@{/act_rt_offices/{id}(id = ${editActRTOffices.getId()})}" style="display:inline">
-        <label class="form-label" for="company">Компания: </label>
+        <label class="form-label" for="company">Филиал: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются все филиалы, созданные в разделе 'Филиалы'.
+              Для создания филиала перейдите в соответствующий раздел.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
         <select class="form-control" th:field="*{editActRTOffices.office.id}" id="company">
             <option th:each="office : ${offices}" th:value="${office.getId()}" th:text="${office.getAddress()}">
             </option>
         </select>
         <br/>
         <label class="form-label" for="device">Оборудование: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются всё оборудование со статусом 'Работает (на складе)'.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
         <input class="form-control" id="device" th:field="*{editActRTOffices.device.inventoryCard}" list="deviceList" autocomplete="off" required>
         <datalist id="deviceList">
             <option th:each="device : ${devicesInStock}" th:value="${device.getInventoryCard()}"
@@ -51,8 +62,10 @@
         <br/>
         <label class="form-label" for="dateOfReception">Дата приемки (возврата): </label>
         <input class="form-control" type="date" th:field="*{editActRTOffices.dateOfReception}" id="dateOfReception">
+        <small id="dateOfReceptionTip" class="form-text text-muted">Если в филиале ещё пользуется оборудованием, оставьте поле пустым</small>
         <div th:if="${#fields.hasErrors('editActRTOffices.dateOfReception')}"
              th:errors="*{editActRTOffices.dateOfReception}">Date of reception error</div>
+        <br/>
         <br/>
         <span class="d-inline-block" tabindex="0"
               data-bs-toggle="tooltip"

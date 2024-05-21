@@ -8,7 +8,8 @@
 <div th:fragment="navbar">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="http://localhost:8080/">Property records</a>
+            <a href="http://localhost:8080/"><img th:src="@{/static/images/dvb_icon.png}" style="width:45px; height:31px;"/></a>
+<!--            <a class="navbar-brand" href="http://localhost:8080/">Property records</a>-->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -75,7 +76,7 @@
                             Отчеты
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="http://localhost:8080/companies_act/report">Действующие акты приема-передачи с контрагентами</a></li>
+                            <li><a class="dropdown-item" href="http://localhost:8080/companies_act/report">Оборудование у контрагентов</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -89,6 +90,15 @@
                             <li><a class="dropdown-item" href="http://localhost:8080/repair_companies/new">Добавить новый ремонтный центр</a></li>
                             <li><a class="dropdown-item" href="http://localhost:8080/act_rt_repair/new">Добавить новый акт приема-передачи (ремонт)</a></li>
                             <li><a class="dropdown-item" href="http://localhost:8080/completed_work_act/new">Добавить новый акт выполненных работ</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Гайд
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="http://localhost:8080/guide/statuses">Статусы оборудования</a></li>
+                            <li><a class="dropdown-item" href="http://localhost:8080/guide/export_to_excel">Экспорт в Excel</a></li>
                         </ul>
                     </li>
                 </ul>

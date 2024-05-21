@@ -12,7 +12,7 @@
 
 <div class="container">
     <h3>Создание номенклатуры</h3>
-    <form th:method="POST" th:action="@{/nomenclature}" th:object="${nomenclature}">
+    <form th:method="POST" th:action="@{/nomenclature}" th:object="${nomenclature}" style="display:inline">
         <label class="form-label" for="type">Tип: </label>
         <input class="form-control" type="text" th:field="*{type}" id="type" list="typeList" autocomplete="on" required>
         <datalist id="typeList">
@@ -31,6 +31,9 @@
         <br/>
         <input class="btn btn-primary mb-3" type="submit" value="Создать">
     </form>
+<!--    <form th:method="GET" th:action="@{/nomenclature/show_all}" style="display:inline">
+        <input class="btn btn-primary mb-3" type="submit" value="Вернуться назад"/>
+    </form>-->
     <br/>
 </div>
 </body>

@@ -13,8 +13,14 @@
 
 <div class="container">
     <h3>Создание акта передачи оборудования с контрагентом</h3>
-    <form th:method="POST" th:action="@{/companies_act}">
+    <form th:method="POST" th:action="@{/companies_act}" style="display:inline">
         <label class="form-label" for="company">Контрагент: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются все контрагенты, созданные в разделе 'Контрагенты'.
+              Для создания контрагента перейдите в соответствующий раздел.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
         <input class="form-control" id="company" th:field="*{companyAct.company.inn}" list="companyList" autocomplete="off" required>
         <datalist id="companyList">
             <option th:each="company : ${companies}" th:value="${company.getInn()}" th:text="${company.getName()}">
@@ -28,6 +34,11 @@
         </select>-->
         <br/>
         <label class="form-label" for="device">Карточка оборудования: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются всё оборудование со статусом 'Работает (на складе)'.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
         <input class="form-control" id="device" th:field="*{companyAct.device.inventoryCard}" list="deviceList" required>
         <datalist id="deviceList">
             <option th:each="device : ${devicesInStock}" th:value="${device.getInventoryCard()}"
@@ -54,13 +65,22 @@
         <div th:if="${#fields.hasErrors('companyAct.dateOfReception')}"
              th:errors="*{companyAct.dateOfReception}">Date of reception error</div>
         <br/>
+        <br/>
 <!--    <select th:field="*{companyAct.moving}" id="moving">
             <option th:each="moving: ${movings}" th:value="${moving}" th:text="${moving}"></option>
         </select>
         <br/>-->
         <input class="btn btn-primary mb-3" type="submit" value="Создать">
     </form>
+<!--    <form th:method="GET" th:action="@{/companies_act/show_all}" style="display:inline">
+        <input class="btn btn-primary mb-3" type="submit" value="Вернуться назад"/>
+    </form>-->
 </div>
+
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
 
 </body>
 </html>

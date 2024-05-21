@@ -28,14 +28,14 @@ public class OfficeDAO {
     }
 
     public void save(Office office){
-        jdbcTemplate.update("INSERT INTO Офисы(адрес, фио_начальника, телефон)" +
-                "VALUES(?, ?, ?)", office.getAddress(), office.getChief(), office.getPhoneNumber());
+        jdbcTemplate.update("INSERT INTO Офисы(адрес, ответственное_лицо, телефон)" +
+                "VALUES(?, ?, ?)", office.getAddress(), office.getResponsiblePerson(), office.getPhoneNumber());
     }
 
     public void update(int id, Office updatedOffice){
-        jdbcTemplate.update("UPDATE Офисы SET адрес = ?, фио_начальника = ?, телефон = ? " +
+        jdbcTemplate.update("UPDATE Офисы SET адрес = ?, ответственное_лицо = ?, телефон = ? " +
                 "WHERE код_офиса = ?", updatedOffice.getAddress(),
-                updatedOffice.getChief(), updatedOffice.getPhoneNumber(), id);
+                updatedOffice.getResponsiblePerson(), updatedOffice.getPhoneNumber(), id);
     }
 
     public void delete(int id){

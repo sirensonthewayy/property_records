@@ -24,6 +24,11 @@
         <div th:if="${#fields.hasErrors('editWriteOffAct.writeOffReason')}" th:errors="*{editWriteOffAct.writeOffReason}">Write off reason error</div>
         <br/>
         <label class="form-label" for="device">Выбор оборудования: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются всё оборудование со статусом 'Не работает'.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
         <input class="form-control" id="device" th:field="*{editWriteOffAct.device.inventoryCard}" list="deviceList" autocomplete="off" required>
         <datalist id="deviceList">
             <option th:each="device : ${devicesInStock}" th:value="${device.getInventoryCard()}"

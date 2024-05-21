@@ -46,7 +46,7 @@ public class DeviceDAO {
                 new DeviceMapper(new NomenclatureMapper()));
     }*/
 
-    public HashMap<String, List<Double>> getAmountAndPriceByStatuses(){
+/*    public HashMap<String, List<Double>> getAmountAndPriceByStatuses(){
         ArrayList<String> statuses = new ArrayList<>();
         statuses.add("Работает (на складе)");
         statuses.add("Работает (у клиента)");
@@ -61,7 +61,7 @@ public class DeviceDAO {
             results.put(status, result);
         }
         return results;
-    }
+    }*/
 
     public Device showOne(String inventoryCard){
         return jdbcTemplate.query("SELECT * FROM Оборудование LEFT JOIN Номенклатура ON Оборудование.код_номенклатуры = Номенклатура.код_номенклатуры WHERE инвентарная_карточка = ?",

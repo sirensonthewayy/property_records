@@ -12,18 +12,21 @@
 
 <div class="container">
     <h3>Создание офиса</h3>
-    <form th:method="POST" th:action="@{/office}" th:object="${office}">
+    <form th:method="POST" th:action="@{/office}" th:object="${office}" style="display:inline">
         <label for="address" class="form-label">Адрес: </label>
         <input type="text"  class="form-control" th:field="*{address}" id="address" required>
         <br/>
-        <label for="chief" class="form-label">Директор: </label>
-        <input type="text" class="form-control" th:field="*{chief}" id="chief" required>
+        <label for="chief" class="form-label">Материально ответственное лицо: </label>
+        <input type="text" class="form-control" th:field="*{responsiblePerson}" id="chief" required>
         <br/>
         <label for="phoneNumber" class="form-label">Номер телефона: </label>
-        <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" required>
+        <input type="text" class="form-control" placeholder="+79998887766" th:field="*{phoneNumber}" id="phoneNumber" required>
         <br/>
         <input type="submit" class="btn btn-primary mb-3" value="Создать">
     </form>
+<!--    <form th:method="GET" th:action="@{/office/show_all}" style="display:inline">
+        <input class="btn btn-primary mb-3" type="submit" value="Вернуться назад"/>
+    </form>-->
     <br/>
 </div>
 </body>

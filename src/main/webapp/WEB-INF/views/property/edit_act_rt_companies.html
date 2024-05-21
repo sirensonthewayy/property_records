@@ -13,7 +13,13 @@
 <div class="container">
     <h3>Редактирование акта приема-передачи с контрагентом</h3>
     <form th:method="PATCH" th:action="@{/companies_act/{id}(id = ${editCompanyAct.getId()})}" style="display:inline">
-        <label class="form-label" for="company">Компания: </label>
+        <label class="form-label" for="company">Контрагент: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются все контрагенты, созданные в разделе 'Контрагенты'.
+              Для создания контрагента перейдите в соответствующий раздел.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
         <input class="form-control" id="company" th:field="*{editCompanyAct.company.inn}" list="companyList" required>
         <datalist id="companyList">
             <option th:each="company : ${companies}" th:value="${company.getInn()}" th:text="${company.getName()}">
@@ -27,6 +33,11 @@
         </select>-->
         <br/>
         <label class="form-label" for="device">Оборудование: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются всё оборудование со статусом 'Работает (на складе)'.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
         <input class="form-control" id="device" th:field="*{editCompanyAct.device.inventoryCard}" list="deviceList" autocomplete="off" required>
         <datalist id="deviceList">
             <option th:each="device : ${devicesInStock}" th:value="${device.getInventoryCard()}"
@@ -58,8 +69,10 @@
         <br/>
         <label class="form-label" for="dateOfReception">Дата приемки (возврата): </label>
         <input class="form-control" type="date" th:field="*{editCompanyAct.dateOfReception}" id="dateOfReception">
+        <small id="dateOfReceptionTip" class="form-text text-muted">Если контрагент ещё пользуется оборудованием, оставьте поле пустым</small>
         <div th:if="${#fields.hasErrors('editCompanyAct.dateOfReception')}"
              th:errors="*{editCompanyAct.dateOfReception}">Date of reception error</div>
+        <br/>
         <br/>
         <span class="d-inline-block" tabindex="0"
               data-bs-toggle="tooltip"
@@ -68,7 +81,6 @@
             <input th:disabled="${editCompanyAct.getDateOfReception() != null && !thisActIsLast}"
                    class="btn btn-primary mb-3" type="submit" value="Обновить"/>
         </span>
-<!--        <input class="btn btn-primary mb-3" type="submit" value="Обновить"/>-->
     </form>
     <form th:method="DELETE" th:action="@{/companies_act/{id}(id = ${editCompanyAct.getId()})}" style="display:inline">
         <input class="btn btn-primary mb-3" type="submit" value="Удалить"/>

@@ -18,7 +18,6 @@ public class Device {
     private Nomenclature nomenclature;
     @NotEmpty(message = "Серийный номер не может быть пустым")
     private String serialNumber;
-    @PastOrPresent(message = "Дата не должна быть позже сегодняшней") @NotNull(message = "Дата не может быть пустой")
     private Date dateOfSupply;
     @Min(value = 0, message = "Цена не может быть отрицательной")
     private Double price;

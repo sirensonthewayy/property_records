@@ -12,14 +12,25 @@
 
 <div class="container">
     <h3>Создание акта передачи оборудования с филиалом</h3>
-    <form th:method="POST" th:action="@{/act_rt_offices}">
-        <label class="form-label" for="office">Компания: </label>
+    <form th:method="POST" th:action="@{/act_rt_offices}" style="display:inline">
+        <label class="form-label" for="office">Филиал: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются все филиалы, созданные в разделе 'Филиалы'.
+              Для создания филиала перейдите в соответствующий раздел.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
         <select class="form-control" th:field="*{actRTOffices.office.id}" id="office" required>
             <option th:each="office : ${offices}" th:value="${office.getId()}" th:text="${office.getAddress()}">
             </option>
         </select>
         <br/>
         <label class="form-label" for="device">Карточка оборудования: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются всё оборудование со статусом 'Работает (на складе)'.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
         <input class="form-control" id="device" th:field="*{actRTOffices.device.inventoryCard}" list="deviceList" autocomplete="off" required>
         <datalist id="deviceList">
             <option th:each="device : ${devicesInStock}" th:value="${device.getInventoryCard()}"
@@ -42,13 +53,22 @@
         <br/>
         <label class="form-label" for="dateOfReception">Дата приемки (возврата): </label>
         <input class="form-control" type="date" th:field="*{actRTOffices.dateOfReception}" id="dateOfReception" aria-describedby="dateOfReceptionTip">
-        <small id="dateOfReceptionTip" class="form-text text-muted">Если контрагент ещё пользуется оборудованием, оставьте поле пустым</small>
+        <small id="dateOfReceptionTip" class="form-text text-muted">Если в филиале ещё пользуется оборудованием, оставьте поле пустым</small>
         <div th:if="${#fields.hasErrors('actRTOffices.dateOfReception')}"
              th:errors="*{actRTOffices.dateOfReception}">Date of reception error</div>
         <br/>
+        <br/>
         <input class="btn btn-primary mb-3" type="submit" value="Создать">
     </form>
+<!--    <form th:method="GET" th:action="@{/act_rt_offices/show_all}" style="display:inline">
+        <input class="btn btn-primary mb-3" type="submit" value="Вернуться назад"/>
+    </form>-->
 </div>
+
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
 
 </body>
 </html>

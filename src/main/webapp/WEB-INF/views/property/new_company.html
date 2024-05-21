@@ -12,9 +12,9 @@
 
 <div class="container">
     <h3>Создание контрагента</h3>
-    <form th:method="POST" th:action="@{/company}" th:object="${company}">
+    <form th:method="POST" th:action="@{/company}" th:object="${company}" style="display:inline">
         <label class="form-label" for="inn">ИНН: </label>
-        <input class="form-control" placeholder="0001112222" type="text" th:field="*{inn}" id="inn" required>
+        <input class="form-control" minlength="10" maxlength="12" placeholder="0001112222" type="text" th:field="*{inn}" id="inn" required>
         <div th:if="${#fields.hasErrors('inn')}" th:errors="*{inn}">Inn error</div>
         <br/>
         <label class="form-label" for="name">Название: </label>
@@ -34,7 +34,9 @@
         <br/>
         <input class="btn btn-primary mb-3" type="submit" value="Создать">
     </form>
-
+<!--    <form th:method="GET" th:action="@{/company/show_all}" style="display:inline">
+        <input class="btn btn-primary mb-3" type="submit" value="Вернуться назад"/>
+    </form>-->
     <br/>
 </div>
 </body>

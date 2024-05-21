@@ -3,15 +3,15 @@ package lk.property.models;
 public class Office {
     Integer id;
     String address;
-    String chief;
+    String responsiblePerson;
     String phoneNumber;
 
     public Office(){}
 
-    public Office(Integer id, String address, String chief, String phoneNumber) {
+    public Office(Integer id, String address, String responsiblePerson, String phoneNumber) {
         this.id = id;
         this.address = address;
-        this.chief = chief;
+        this.responsiblePerson = responsiblePerson;
         this.phoneNumber = phoneNumber;
     }
 
@@ -31,12 +31,12 @@ public class Office {
         this.address = address;
     }
 
-    public String getChief() {
-        return chief;
+    public String getResponsiblePerson() {
+        return responsiblePerson;
     }
 
-    public void setChief(String chief) {
-        this.chief = chief;
+    public void setResponsiblePerson(String responsiblePerson) {
+        this.responsiblePerson = responsiblePerson;
     }
 
     public String getPhoneNumber() {

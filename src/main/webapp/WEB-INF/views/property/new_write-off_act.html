@@ -12,7 +12,7 @@
 
 <div class="container">
     <h3>Создание акта МФУ</h3>
-    <form th:method="POST" th:action="@{/write-off_act}">
+    <form th:method="POST" th:action="@{/write-off_act}" style="display:inline">
         <label class="form-label" for="date">Дата: </label>
         <input class="form-control" type="date" th:field="*{writeOffAct.date}" id="date" required>
         <div th:if="${#fields.hasErrors('writeOffAct.date')}" th:errors="*{writeOffAct.date}">Date error</div>
@@ -22,6 +22,11 @@
         <div th:if="${#fields.hasErrors('writeOffAct.writeOffReason')}" th:errors="*{writeOffAct.writeOffReason}">Write off reason error</div>
         <br/>
         <label class="form-label" for="device">Выбор оборудования: </label>
+        <span class="d-inline-block" tabindex="0"
+              data-bs-toggle="tooltip"
+              data-bs-title="В данном поле отображаются всё оборудование со статусом 'Не работает'.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+        </span>
         <input class="form-control" id="device" th:field="*{writeOffAct.device.inventoryCard}" list="deviceList" autocomplete="off">
         <datalist id="deviceList">
             <option th:each="device : ${devicesInStock}" th:value="${device.getInventoryCard()}"
@@ -38,7 +43,13 @@
         <br/>
         <input class="btn btn-primary mb-3" type="submit" value="Создать">
     </form>
+<!--    <form th:method="GET" th:action="@{/write-off_act/show_all}" style="display:inline">
+        <input class="btn btn-primary mb-3" type="submit" value="Вернуться назад"/>
+    </form>-->
 </div>
-
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
 </body>
 </html>

@@ -17,11 +17,11 @@
         <label class="form-label" for="address">Адрес: </label>
         <input class="form-control" type="text" th:field="*{address}" id="address" required>
         <br/>
-        <label class="form-label" for="chief">Директор: </label>
-        <input class="form-control" type="text" th:field="*{chief}" id="chief" required>
+        <label class="form-label" for="chief">Материально ответственное лицо: </label>
+        <input class="form-control" type="text" th:field="*{responsiblePerson}" id="chief" required>
         <br/>
         <label class="form-label" for="phoneNumber">Номер телефона: </label>
-        <input class="form-control" type="text" th:field="*{phoneNumber}" id="phoneNumber" required>
+        <input class="form-control" placeholder="+79998887766" type="text" th:field="*{phoneNumber}" id="phoneNumber" required>
         <br/>
         <input class="btn btn-primary mb-3" type="submit" value="Обновить">
     </form>

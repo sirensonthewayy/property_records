@@ -29,7 +29,7 @@ public class WriteOffActsController {
     public void initModel(@PathVariable(required = false, value="id") Integer id, Model model){
         model.addAttribute("writeOffAct", new WriteOffAct());
         model.addAttribute("devicesInStock", deviceDAO.showAllByStatuses(
-                new String[]{"Работает (на складе)", "Не работает", "Неисправен"}));
+                new String[]{"Не работает"}));
         model.addAttribute("editWriteOffAct", writeOffActDAO.showOne(id));
     }
 

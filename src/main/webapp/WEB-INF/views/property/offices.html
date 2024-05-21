@@ -23,7 +23,7 @@
             <tr>
                 <th scope="col">№</th>
                 <th scope="col">Адрес</th>
-                <th scope="col">Директор</th>
+                <th scope="col">Материально ответственное лицо</th>
                 <th scope="col">Номер телефона</th>
             </tr>
         </thead>
@@ -35,7 +35,7 @@
                         </a>
                     </td>
                     <td th:text="${office.getAddress()}"></td>
-                    <td th:text="${office.getChief()}"></td>
+                    <td th:text="${office.getResponsiblePerson()}"></td>
                     <td th:text="${office.getPhoneNumber()}"></td>
                 </tr>
         </tbody>

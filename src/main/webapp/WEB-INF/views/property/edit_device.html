@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:display="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Редактирование карточки оборудования</title>
@@ -13,44 +14,59 @@
     <h3>Редактирование карточки оборудования</h3>
     <div class="row">
         <div class="col-8">
-            <form th:method="PATCH" th:action="@{/device/{ic}(ic = ${device.getInventoryCard()})}" style="display:inline">
+            <form th:method="PATCH" th:action="@{/device/{ic}(ic = ${editDevice.getInventoryCard()})}" style="display:inline">
                 <label class="form-label" for="inventoryCard">Инвентарная карточка: </label>
-                <input class="form-control" type="text" pattern="[^\/\\]+" th:field="*{device.inventoryCard}" id="inventoryCard" required>
-                <div th:if="${#fields.hasErrors('device.inventoryCard')}"
-                     th:errors="*{device.inventoryCard}">Inventory card error</div>
+                <input class="form-control" type="text" pattern="[^\/\\]+" th:field="*{editDevice.inventoryCard}" id="inventoryCard" required>
+                <div th:if="${#fields.hasErrors('editDevice.inventoryCard')}"
+                     th:errors="*{editDevice.inventoryCard}">Inventory card error</div>
                 <br/>
                 <label class="form-label" for="serialNumber">Серийный номер: </label>
-                <input class="form-control" type="text" th:field="*{device.serialNumber}" id="serialNumber" required>
-                <div th:if="${#fields.hasErrors('device.serialNumber')}"
-                     th:errors="*{device.serialNumber}">Serial number error</div>
+                <input class="form-control" type="text" th:field="*{editDevice.serialNumber}" id="serialNumber" required>
+                <div th:if="${#fields.hasErrors('editDevice.serialNumber')}"
+                     th:errors="*{editDevice.serialNumber}">Serial number error</div>
                 <br/>
                 <label class="form-label" for="dateOfSupply">Дата приемки: </label>
-                <input class="form-control" type="date" th:field="*{device.dateOfSupply}" id="dateOfSupply" required>
-                <div th:if="${#fields.hasErrors('device.dateOfSupply')}"
-                     th:errors="*{device.dateOfSupply}">Date error</div>
+                <input class="form-control" type="date" th:field="*{editDevice.dateOfSupply}" id="dateOfSupply" required>
+                <div th:if="${#fields.hasErrors('editDevice.dateOfSupply')}"
+                     th:errors="*{editDevice.dateOfSupply}">Date error</div>
                 <br/>
                 <label class="form-label" for="nomenclature">Номенклатура: </label>
-                <select class="form-control" th:field="*{device.nomenclature.id}" id="nomenclature" required>
+                <span class="d-inline-block" tabindex="0"
+                      data-bs-toggle="tooltip"
+                      data-bs-title="В данном поле отображаются модели оборудования, созданные в разделе 'Номенклатура'.
+                      Для создания номенклатуры перейдите в соответствующий раздел.">
+                    <img th:src="@{/static/images/tooltip_icon.png}" style="width:20px; height:20px;"/>
+                </span>
+                <select class="form-control" th:field="*{editDevice.nomenclature.id}" id="nomenclature" required>
                     <option th:each="avalNomenclature: ${avalNomenclatures}" th:value="${avalNomenclature.getId()}"
                             th:text="${avalNomenclature.getType()} + ' ' + ${avalNomenclature.getProducer()} + ' ' + ${avalNomenclature.getName()}"></option>
                 </select>
                 <br/>
                 <label class="form-label" for="price">Цена: </label>
-                <input class="form-control" type="number" th:field="*{device.price}" id="price" required>
-                <div th:if="${#fields.hasErrors('device.price')}"
-                     th:errors="*{device.price}">Price error</div>
+                <input class="form-control" type="number" th:field="*{editDevice.price}" min="0" id="price" required>
+                <div th:if="${#fields.hasErrors('editDevice.price')}"
+                     th:errors="*{editDevice.price}">Price error</div>
                 <br/>
                 <label class="form-label" for="status">Статус: </label>
-                <select class="form-control" th:field="*{device.status}" id="status" required>
-                    <option th:each="status: ${statuses}" th:value="${status}" th:text="${status}"></option>
+                <select th:with="editingIsNotAllowed=${editDevice.getStatus() != 'Работает (на складе)' && editDevice.getStatus() != 'Не работает'}"
+                        class="form-control" th:field="*{editDevice.status}" id="status" required>
+                    <option th:if="${editingIsNotAllowed}"
+                            th:value="${editDevice.getStatus()}" th:text="${editDevice.getStatus()}" selected></option>
+                    <option th:each="status: ${statuses}" th:value="${status}" th:text="${status}" th:attr="disabled=${editingIsNotAllowed ? 'disabled' : null}"></option>
                 </select>
+<!--                <select th:disabled="${editDevice.getStatus() != 'Работает (на складе)' && editDevice.getStatus() != 'Не работает'}"
+                        class="form-control" th:with="deviceStatus=${editDevice.getStatus()}" id="status" required>
+                    <option th:if="${deviceStatus != 'Работает (на складе)' && deviceStatus != 'Не работает'}"
+                            th:value="${deviceStatus}" th:text="${deviceStatus}" selected></option>
+                    <option th:each="status: ${statuses}" th:value="${status}" th:text="${status}"></option>
+                </select>-->
                 <br/>
                 <label class="form-label" for="note">Примечание: </label>
-                <input class="form-control" type="text" th:field="*{device.note}" id="note">
+                <input class="form-control" type="text" th:field="*{editDevice.note}" id="note">
                 <br/>
                 <input class="btn btn-primary mb-3" type="submit" value="Обновить" >
             </form>
-            <form th:method="DELETE" th:action="@{/device/{ic}(ic = ${device.getInventoryCard()})}" style="display:inline">
+            <form th:method="DELETE" th:action="@{/device/{ic}(ic = ${editDevice.getInventoryCard()})}" style="display:inline">
                 <span class="d-inline-block" tabindex="0"
                               data-bs-toggle="tooltip"
                               th:attr="data-bs-title=${!acts.isEmpty() ? 'Данное оборудование имеет проведенные документы' : ''}">
