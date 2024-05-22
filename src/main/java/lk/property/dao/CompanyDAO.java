@@ -43,7 +43,7 @@ public class CompanyDAO {
     }
 
     public boolean haveActs(String inn){
-        return jdbcTemplate.queryForObject("SELECT EXISTS(SELECT инн FROM Акт_ПП_контрагенты WHERE инн = ?)",
+        return jdbcTemplate.queryForObject("SELECT EXISTS(SELECT инн FROM Акты_ПП_контрагенты WHERE инн = ?)",
                 new String[]{inn}, Boolean.class);
     }
 }
